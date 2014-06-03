@@ -4,7 +4,7 @@ import random
 import copy
 
 
-class Game2048:
+class Game2048(object):
     def __init__(self, size=4, target=2048, ai=None):
         """Init a game
         :param size: positive integer, size of board
@@ -72,7 +72,7 @@ class Game2048:
         for r in range(self.size):
             row = self.board[r]
             for val in row:
-                val_s = str(val) if val != 0 else ' '
+                val_s = str(val) if val else ' '
                 d = self._width - len(val_s)
 
                 # align center
@@ -103,8 +103,8 @@ class Game2048:
 
     def merge(self, direction=None):
         """Move the board
-        @ param: direction, a letter 'U'/'D'/'L'/'R'
-        @ return: True if valid move, otherwise False
+        :param direction: a letter ('U'/'D'/'L'/'R') indicating direction
+        :return: True if valid move, otherwise False
         """
         valid = False
         self._empty = []
@@ -173,19 +173,21 @@ class Game2048:
             print(self)
 
             # check if game ends
-            if self.is_win():
+            if self.is_win:
                 print("You WIN!!!")
                 end = True
-            elif self.is_dead():
+            elif self.is_dead:
                 print("You LOSE >_<")
                 end = True
 
+    @property
     def is_win(self):
         return self.best >= self.target
 
+    @property
     def is_dead(self):
         # empty cell exists
-        if len(self._empty) > 0:
+        if self._empty:
             return False
 
         # cell full, but can merge: two neighbor are the same
